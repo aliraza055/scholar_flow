@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:scholar_flow/screens/attendance_sheet.dart';
-import 'package:scholar_flow/screens/dashboard_screen.dart';
+import 'package:scholar_flow/screens/onboard.dart';
+;
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: AttendanceScreen(),
+      home: WelcomeScreen(),
     );
   }
 }
