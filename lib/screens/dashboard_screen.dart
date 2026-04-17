@@ -45,6 +45,7 @@ class DashboardView extends StatelessWidget {
                 title: 'Add Student',
                 subtitle: 'Enroll new scholars',
                 icon: Icons.person_add,
+                backgroundColor: Color(0xFFEFFAF0),
               ),
 
               SizedBox(height: 12),
@@ -53,6 +54,7 @@ class DashboardView extends StatelessWidget {
                 title: 'Enter Assignment Marks',
                 subtitle: 'Grade homework',
                 icon: Icons.assignment,
+                backgroundColor: Color(0xFFFFF4E6),
               ),
 
               SizedBox(height: 12),
@@ -61,6 +63,7 @@ class DashboardView extends StatelessWidget {
                 title: 'Enter Quiz Marks',
                 subtitle: 'Flash test results',
                 icon: Icons.quiz,
+                backgroundColor: Color(0xFFF5EEFF),
               ),
 
               SizedBox(height: 24),
