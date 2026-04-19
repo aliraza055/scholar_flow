@@ -73,7 +73,6 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
@@ -109,7 +108,7 @@ class WelcomeScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushReplacementNamed(
                       context,
-                      AppRouters.dashScreen,
+                      AppRouters.bottomNav,
                     );
                   },
                   style: ElevatedButton.styleFrom(

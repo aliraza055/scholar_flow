@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scholar_flow/widgets/app_bar.dart';
 
 class PerformanceAnalyticsPage extends StatelessWidget {
   const PerformanceAnalyticsPage({super.key});
@@ -7,35 +8,7 @@ class PerformanceAnalyticsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FB),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Row(
-          children: [
-            const CircleAvatar(
-              backgroundImage: NetworkImage(
-                'https://via.placeholder.com/150',
-              ), // Replace with actual image
-              radius: 18,
-            ),
-            const SizedBox(width: 10),
-            const Text(
-              "Academic Sanctuary",
-              style: TextStyle(
-                color: Color(0xFF1D2939),
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_none, color: Colors.blue),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -69,8 +42,8 @@ class PerformanceAnalyticsPage extends StatelessWidget {
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
-                        value: "Class 10-A (Science)",
-                        items: ["Class 10-A (Science)"]
+                        value: "BSCS 8th(Section A)",
+                        items: ["BSCS 8th(Section A)"]
                             .map(
                               (e) => DropdownMenuItem(value: e, child: Text(e)),
                             )
@@ -118,10 +91,10 @@ class PerformanceAnalyticsPage extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 15),
-            _buildSubjectBar("Mathematics", 0.88, Colors.blue),
-            _buildSubjectBar("Quantum Physics", 0.74, Colors.deepPurple),
-            _buildSubjectBar("Literature & Ethics", 0.92, Colors.blueGrey),
-            _buildSubjectBar("Global History", 0.61, Colors.redAccent),
+            _buildSubjectBar("Principal of Psychology", 0.88, Colors.blue),
+            _buildSubjectBar("Game Development", 0.74, Colors.deepPurple),
+            _buildSubjectBar("Netork Security", 0.92, Colors.blueGrey),
+            _buildSubjectBar("SQA", 0.61, Colors.redAccent),
 
             const SizedBox(height: 30),
 
@@ -131,25 +104,6 @@ class PerformanceAnalyticsPage extends StatelessWidget {
             const SizedBox(height: 100), // Bottom padding for scrolling
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 2,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.grid_view),
-            label: 'DASHBOARD',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month),
-            label: 'ATTENDANCE',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.insights),
-            label: 'PERFORMANCE',
-          ),
-        ],
       ),
     );
   }
@@ -375,16 +329,12 @@ class PerformanceAnalyticsPage extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           _buildAttentionTile(
-            "Marcus Wei",
+            "Abdul Wasi",
             "GPA dropped to 2.1",
             "Schedule Meeting",
           ),
           const SizedBox(height: 12),
-          _buildAttentionTile(
-            "Sarah Jenkins",
-            "Attendance < 75%",
-            "Send Alert",
-          ),
+          _buildAttentionTile("Sidra Rehman", "Attendance < 75%", "Send Alert"),
         ],
       ),
     );

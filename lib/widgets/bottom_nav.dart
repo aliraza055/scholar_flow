@@ -11,31 +11,56 @@ class DashboardBottomNav extends StatefulWidget {
 }
 
 class _DashboardBottomNavState extends State<DashboardBottomNav> {
-  int _seleted = 0;
+  int _selected = 0;
+
   final List<Widget> _pages = [
     DashboardView(),
     AttendanceScreen(),
     PerformanceAnalyticsPage(),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_seleted],
+      extendBody: true,
+      body: _pages[_selected],
+
       bottomNavigationBar: Container(
+        margin: const EdgeInsets.all(12),
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(color: Colors.black12, blurRadius: 10, spreadRadius: 2),
+          ],
+        ),
+
         child: BottomNavigationBar(
-          currentIndex: _seleted,
+          currentIndex: _selected,
           onTap: (index) {
             setState(() {
-              _seleted = index;
+              _selected = index;
             });
           },
+
+          type: BottomNavigationBarType.fixed,
+
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+
+          selectedItemColor: Color(0xFF006692), // 🔵 BLUE ACTIVE
+          unselectedItemColor: Colors.grey,
+
+          showUnselectedLabels: true,
+
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.dashboard),
               label: 'Dashboard',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.check_circle_outline),
+              icon: Icon(Icons.check_circle),
               label: 'Attendance',
             ),
             BottomNavigationBarItem(

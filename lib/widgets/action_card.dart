@@ -1,3 +1,4 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
 class ActionCard extends StatelessWidget {
@@ -28,14 +29,17 @@ class ActionCard extends StatelessWidget {
         children: [
           /// 🔵 Decorative Shape (Top Right)
           Positioned(
-            top: -30,
-            right: -30,
+            top: -20,
+            right: -20,
             child: Container(
               width: 180,
               height: 160,
               decoration: BoxDecoration(
-                color: const Color(0xFFE6F2FF),
-                borderRadius: BorderRadius.circular(100),
+                color: const Color(0xFF99CDE5),
+                borderRadius: BorderRadius.only(
+                  //top: Radius.circular(80),
+                  bottomLeft: Radius.circular(80),
+                ),
               ),
             ),
           ),
@@ -47,7 +51,7 @@ class ActionCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
-                  backgroundColor: const Color(0xFF0B5ED7),
+                  backgroundColor: const Color(0xFF006692),
                   child: Icon(icon, color: Colors.white),
                 ),
                 const SizedBox(height: 16),
@@ -69,7 +73,7 @@ class ActionCard extends StatelessWidget {
                 ElevatedButton(
                   onPressed: ontap,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0B5ED7),
+                    backgroundColor: const Color(0xFF006692),
                     shape: const StadiumBorder(),
                   ),
                   child: Row(

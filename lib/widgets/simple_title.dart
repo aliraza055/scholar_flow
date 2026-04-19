@@ -26,25 +26,32 @@ class SimpleTile extends StatelessWidget {
       ),
       child: Container(
         height: 160,
+        width: double.infinity,
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: backgroundColor ?? Colors.white,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Row(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CircleAvatar(
-              backgroundColor: const Color(0xFFE6F2FF),
-              child: Icon(icon, color: Colors.blue),
+              radius: 30,
+              backgroundColor: const Color(0xFF006692),
+              child: Icon(icon, color: Colors.white),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(height: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(subtitle, style: const TextStyle(color: Colors.black54)),

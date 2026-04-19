@@ -12,37 +12,12 @@ class _RecordAchievementPageState extends State<RecordAchievementPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FB),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Row(
-          children: [
-            const CircleAvatar(
-              backgroundColor: Color(0xFF00A3AD),
-              child: Icon(Icons.person, color: Colors.white),
-            ),
-            const SizedBox(width: 10),
-            const Text(
-              "Academic Sanctuary",
-              style: TextStyle(
-                color: Color(0xFF1D2939),
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.blue),
-            onPressed: () {},
-          ),
-        ],
-      ),
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
           children: [
+            SizedBox(height: 22),
             const Text(
               "Record Achievement",
               style: TextStyle(
@@ -66,7 +41,7 @@ class _RecordAchievementPageState extends State<RecordAchievementPage> {
               iconColor: const Color(0xFF6366F1),
               title: "Student Details",
               label: "STUDENT ROLL NUMBER",
-              hint: "e.g. SCH-2024-089",
+              hint: "e.g F22NDOCS1M1022",
               suffixIcon: Icons.fingerprint,
             ),
 
@@ -138,34 +113,6 @@ class _RecordAchievementPageState extends State<RecordAchievementPage> {
             const SizedBox(height: 40),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1,
-        selectedItemColor: const Color(0xFF006692),
-        unselectedItemColor: Colors.blueGrey,
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
-        items: [
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.grid_view),
-            label: 'DASHBOARD',
-          ),
-          BottomNavigationBarItem(
-            icon: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.blue.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(Icons.calendar_month),
-            ),
-            label: 'ATTENDANCE',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.insights),
-            label: 'PERFORMANCE',
-          ),
-        ],
       ),
     );
   }

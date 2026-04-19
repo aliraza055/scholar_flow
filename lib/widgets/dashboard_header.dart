@@ -8,17 +8,6 @@ class DashboardHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: const [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Academic Sanctuary',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            Icon(Icons.notifications_none),
-          ],
-        ),
-        SizedBox(height: 16),
         Text(
           'Welcome, Teacher',
           style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),

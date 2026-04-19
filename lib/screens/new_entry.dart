@@ -11,29 +11,6 @@ class NewEntryScreen extends StatelessWidget {
           child: Column(
             children: [
               /// Top Bar
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.blueGrey,
-                        child: Icon(Icons.person, color: Colors.white),
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        "Academic Sanctuary",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Icon(Icons.notifications),
-                ],
-              ),
-
               SizedBox(height: 20),
 
               /// Title
@@ -76,7 +53,7 @@ class NewEntryScreen extends StatelessWidget {
                       SizedBox(height: 8),
 
                       _buildTextField(
-                        hint: "e.g. Julianne Sterling",
+                        hint: "e.g. Umar Aslam",
                         icon: Icons.person,
                       ),
 
@@ -94,7 +71,10 @@ class NewEntryScreen extends StatelessWidget {
 
                       SizedBox(height: 8),
 
-                      _buildTextField(hint: "ID-2024-001", icon: Icons.badge),
+                      _buildTextField(
+                        hint: "F22NDOCS1M1022",
+                        icon: Icons.badge,
+                      ),
 
                       SizedBox(height: 15),
 
@@ -161,8 +141,11 @@ class NewEntryScreen extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {},
-                          icon: Icon(Icons.save),
-                          label: Text("Save Profile"),
+                          icon: Icon(Icons.save, color: Colors.white),
+                          label: Text(
+                            "Save Profile",
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
 
