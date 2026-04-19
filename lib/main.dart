@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:scholar_flow/screens/attendance_sheet.dart';
+import 'package:scholar_flow/screens/dashboard_screen.dart';
+import 'package:scholar_flow/screens/new_entry.dart';
 import 'package:scholar_flow/screens/onboard.dart';
-;
+import 'package:scholar_flow/screens/performance_analysis.dart';
+import 'package:scholar_flow/screens/record_achivement.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +21,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: WelcomeScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => WelcomeScreen(),
+        '/dash': (context) => DashboardView(),
+        '/attendance': (context) => AttendanceScreen(),
+        '/performance': (context) => PerformanceAnalyticsPage(),
+        '/addNew': (context) => NewEntryScreen(),
+        '/marks': (context) => RecordAchievementPage(),
+      },
     );
   }
 }

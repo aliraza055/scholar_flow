@@ -5,9 +5,14 @@ import 'package:scholar_flow/widgets/dashboard_header.dart';
 import 'package:scholar_flow/widgets/overview.dart';
 import 'package:scholar_flow/widgets/simple_title.dart';
 
-class DashboardView extends StatelessWidget {
+class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
 
+  @override
+  State<DashboardView> createState() => _DashboardViewState();
+}
+
+class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +23,7 @@ class DashboardView extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               DashboardHeader(),
               SizedBox(height: 24),
 
@@ -27,34 +32,52 @@ class DashboardView extends StatelessWidget {
                 subtitle:
                     'Record student presence for the morning session. 3 classes pending.',
                 buttonText: 'Start Session',
+                ontap: () {
+                  Navigator.pushNamed(context, '/attendance');
+                },
                 icon: Icons.calendar_today,
               ),
 
               SizedBox(height: 16),
 
-              SimpleTile(
-                title: 'View Performance',
-                subtitle: 'Analytics for Mid-term results',
-                icon: Icons.trending_up,
-                backgroundColor: Color(0xFFEFF2FF),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, '/performance');
+                },
+                child: SimpleTile(
+                  title: 'View Performance',
+                  subtitle: 'Analytics for Mid-term results',
+                  icon: Icons.trending_up,
+                  backgroundColor: Color(0xFFEFF2FF),
+                ),
               ),
 
               SizedBox(height: 16),
 
-              SimpleTile(
-                title: 'Add Student',
-                subtitle: 'Enroll new scholars',
-                icon: Icons.person_add,
-                backgroundColor: Color(0xFFEFFAF0),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, '/addNew');
+                },
+                child: SimpleTile(
+                  title: 'Add Student',
+                  subtitle: 'Enroll new scholars',
+                  icon: Icons.person_add,
+                  backgroundColor: Color(0xFFEFFAF0),
+                ),
               ),
 
               SizedBox(height: 12),
 
-              SimpleTile(
-                title: 'Enter Assignment Marks',
-                subtitle: 'Grade homework',
-                icon: Icons.assignment,
-                backgroundColor: Color(0xFFFFF4E6),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, '/marks');
+                },
+                child: SimpleTile(
+                  title: 'Enter Assignment Marks',
+                  subtitle: 'Grade homework',
+                  icon: Icons.assignment,
+                  backgroundColor: Color(0xFFFFF4E6),
+                ),
               ),
 
               SizedBox(height: 12),

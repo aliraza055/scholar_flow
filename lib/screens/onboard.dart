@@ -80,7 +80,7 @@ class WelcomeScreen extends StatelessWidget {
                 height: 55,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navigate to Dashboard
+                    Navigator.pushNamed(context, '/dash');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF006692),

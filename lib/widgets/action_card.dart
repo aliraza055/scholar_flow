@@ -4,6 +4,7 @@ class ActionCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final String buttonText;
+  final VoidCallback ontap;
   final IconData icon;
 
   const ActionCard({
@@ -12,6 +13,7 @@ class ActionCard extends StatelessWidget {
     required this.subtitle,
     required this.buttonText,
     required this.icon,
+    required this.ontap,
   });
 
   @override
@@ -65,7 +67,7 @@ class ActionCard extends StatelessWidget {
                 const Spacer(),
 
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: ontap,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF0B5ED7),
                     shape: const StadiumBorder(),

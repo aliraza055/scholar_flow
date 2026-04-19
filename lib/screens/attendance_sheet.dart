@@ -186,7 +186,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 ),
               ),
 
-              /// Bottom Navigation
               Container(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
