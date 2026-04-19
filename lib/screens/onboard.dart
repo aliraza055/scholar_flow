@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scholar_flow/Core/Routers/app_routers.dart';
 
 void main() {
   runApp(
@@ -71,6 +72,32 @@ class WelcomeScreen extends StatelessWidget {
                   height: 1.5,
                 ),
               ),
+              const SizedBox(height: 20),
+
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Created By:',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF006692),
+                    height: 1.5,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              Text(
+                'DIL RABAZ HUSSAIN \n  AMBER TANVEER \n LAIBA SHOAIB ',
+                // textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF1D2939),
+                  height: 1.5,
+                ),
+              ),
 
               const Spacer(),
 
@@ -80,7 +107,10 @@ class WelcomeScreen extends StatelessWidget {
                 height: 55,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/dash');
+                    Navigator.pushReplacementNamed(
+                      context,
+                      AppRouters.dashScreen,
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF006692),

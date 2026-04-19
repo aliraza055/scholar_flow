@@ -17,7 +17,6 @@ class _DashboardViewState extends State<DashboardView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F8FA),
-      bottomNavigationBar: const DashboardBottomNav(),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -32,18 +31,14 @@ class _DashboardViewState extends State<DashboardView> {
                 subtitle:
                     'Record student presence for the morning session. 3 classes pending.',
                 buttonText: 'Start Session',
-                ontap: () {
-                  Navigator.pushNamed(context, '/attendance');
-                },
+                ontap: () {},
                 icon: Icons.calendar_today,
               ),
 
               SizedBox(height: 16),
 
               GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, '/performance');
-                },
+                onTap: () {},
                 child: SimpleTile(
                   title: 'View Performance',
                   subtitle: 'Analytics for Mid-term results',
@@ -55,9 +50,7 @@ class _DashboardViewState extends State<DashboardView> {
               SizedBox(height: 16),
 
               GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, '/addNew');
-                },
+                onTap: () {},
                 child: SimpleTile(
                   title: 'Add Student',
                   subtitle: 'Enroll new scholars',
@@ -69,9 +62,7 @@ class _DashboardViewState extends State<DashboardView> {
               SizedBox(height: 12),
 
               GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, '/marks');
-                },
+                onTap: () {},
                 child: SimpleTile(
                   title: 'Enter Assignment Marks',
                   subtitle: 'Grade homework',
