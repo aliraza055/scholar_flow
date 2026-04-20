@@ -11,7 +11,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         children: [
           const CircleAvatar(
-            backgroundImage: AssetImage('asstes/images/image.jpg'),
+            backgroundImage: AssetImage('assets/images/image.jpg'),
             radius: 18,
           ),
           const SizedBox(width: 10),
