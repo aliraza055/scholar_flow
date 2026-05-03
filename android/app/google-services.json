@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "636555568061",
+    "project_id": "scholar-flow-f05f5",
+    "storage_bucket": "scholar-flow-f05f5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:636555568061:android:fd3eb42b680c4b436c68d4",
+        "android_client_info": {
+          "package_name": "com.example.scholar_flow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtGG_M2CGRU18IFneOHHUNgML__EZ92Cw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
