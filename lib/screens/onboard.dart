@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scholar_flow/Core/Routers/app_routers.dart';
+import 'package:scholar_flow/screens/sing_in.dart';
 
 void main() {
   runApp(
@@ -174,7 +175,12 @@ class WelcomeScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 52,
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => SignInScreen()),
+                    );
+                  },
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Color(0xFFD0D5DD)),
                     shape: RoundedRectangleBorder(
