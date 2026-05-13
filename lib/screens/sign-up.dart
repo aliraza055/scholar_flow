@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scholar_flow/Services/auth_services.dart';
 import 'package:scholar_flow/widgets/textfeild.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -185,7 +186,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             if (_keyform.currentState!.validate()) {
-                              // Proceed with signup
+                              Auth().signUp(
+                                context,
+                                _nameController.text,
+                                _emailController.text,
+                                _passwordController.text,
+                                _subjectController.text,
+                              );
                             }
                           },
                           style: ElevatedButton.styleFrom(

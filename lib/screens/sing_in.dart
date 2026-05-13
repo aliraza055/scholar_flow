@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scholar_flow/Constants/app_theme.dart';
 import 'package:scholar_flow/Core/Routers/app_routers.dart';
+import 'package:scholar_flow/Services/auth_services.dart';
 import 'package:scholar_flow/widgets/textfeild.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -160,7 +161,11 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             if (_keyform.currentState!.validate()) {
-                              // Proceed with signup
+                              Auth().signIn(
+                                context,
+                                _emailController.text,
+                                _passwordController.text,
+                              );
                             }
                           },
                           style: ElevatedButton.styleFrom(

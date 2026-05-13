@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:scholar_flow/widgets/flutter_toast.dart';
+import 'package:scholar_flow/widgets/textfeild.dart';
 
 class NewEntryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final _nameContoller = TextEditingController();
+    final _rollContoller = TextEditingController();
+    final _classContoller = TextEditingController();
+
     return Scaffold(
       backgroundColor: Color(0xfff4f6f8),
       body: SafeArea(
@@ -51,8 +57,8 @@ class NewEntryScreen extends StatelessWidget {
                       ),
 
                       SizedBox(height: 8),
-
-                      _buildTextField(
+                      AppTextFormField(
+                        controller: _nameContoller,
                         hint: "e.g. Umar Aslam",
                         icon: Icons.person,
                       ),
@@ -70,8 +76,8 @@ class NewEntryScreen extends StatelessWidget {
                       ),
 
                       SizedBox(height: 8),
-
-                      _buildTextField(
+                      AppTextFormField(
+                        controller: _rollContoller,
                         hint: "F22NDOCS1M1022",
                         icon: Icons.badge,
                       ),
@@ -89,11 +95,10 @@ class NewEntryScreen extends StatelessWidget {
                       ),
 
                       SizedBox(height: 8),
-
-                      _buildTextField(
-                        hint: "Select educational stage",
+                      AppTextFormField(
+                        controller: _classContoller,
+                        hint: "8th_C",
                         icon: Icons.school,
-                        isDropdown: true,
                       ),
 
                       SizedBox(height: 20),
@@ -140,7 +145,18 @@ class NewEntryScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            if (_nameContoller.text.isNotEmpty ||
+                                _rollContoller.text.isNotEmpty ||
+                                _classContoller.text.isNotEmpty) {
+                              print('ejlo');
+                            } else {
+                              ToastError().showToast(
+                                message: 'please fulfil the data ',
+                                bgColor: Colors.red,
+                              );
+                            }
+                          },
                           icon: Icon(Icons.save, color: Colors.white),
                           label: Text(
                             "Save Profile",
