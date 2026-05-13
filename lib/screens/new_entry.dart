@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:scholar_flow/Services/firebase_services.dart';
 import 'package:scholar_flow/widgets/flutter_toast.dart';
 import 'package:scholar_flow/widgets/textfeild.dart';
 
-class NewEntryScreen extends StatelessWidget {
+class NewEntryScreen extends StatefulWidget {
+  @override
+  State<NewEntryScreen> createState() => _NewEntryScreenState();
+}
+
+class _NewEntryScreenState extends State<NewEntryScreen> {
+  final _nameContoller = TextEditingController();
+  final _rollContoller = TextEditingController();
+  final _classContoller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final _nameContoller = TextEditingController();
-    final _rollContoller = TextEditingController();
-    final _classContoller = TextEditingController();
-
     return Scaffold(
       backgroundColor: Color(0xfff4f6f8),
       body: SafeArea(
@@ -149,7 +154,12 @@ class NewEntryScreen extends StatelessWidget {
                             if (_nameContoller.text.isNotEmpty ||
                                 _rollContoller.text.isNotEmpty ||
                                 _classContoller.text.isNotEmpty) {
-                              print('ejlo');
+                              FirebaseServices().uploadStudent(
+                                context,
+                                name: _nameContoller.text,
+                                rollNo: _rollContoller.text,
+                                semester: _classContoller.text,
+                              );
                             } else {
                               ToastError().showToast(
                                 message: 'please fulfil the data ',

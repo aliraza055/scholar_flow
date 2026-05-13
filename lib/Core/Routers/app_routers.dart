@@ -7,6 +7,7 @@ import 'package:scholar_flow/screens/performance_analysis.dart';
 import 'package:scholar_flow/screens/record_achivement.dart';
 import 'package:scholar_flow/screens/sign-up.dart';
 import 'package:scholar_flow/screens/sing_in.dart';
+import 'package:scholar_flow/screens/students_list.dart';
 import 'package:scholar_flow/widgets/bottom_nav.dart';
 
 class AppRouters {
@@ -19,6 +20,7 @@ class AppRouters {
   static const addNew = '/addNew';
   static const record = '/record';
   static const performance = '/performance';
+  static const students = '/students';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -36,7 +38,8 @@ class AppRouters {
         return MaterialPageRoute(builder: (_) => const DashboardBottomNav());
       case attendanceScreen:
         return MaterialPageRoute(builder: (_) => AttendanceScreen());
-
+      case students:
+        return MaterialPageRoute(builder: (_) => Students());
       case addNew:
         return MaterialPageRoute(builder: (_) => NewEntryScreen());
 

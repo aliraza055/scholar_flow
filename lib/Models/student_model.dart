@@ -3,22 +3,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class StudentModel {
   final String id;
   final String name;
-  final String email;
   final String rollNo;
-  final String department;
-  final int semester;
-  final String phone;
-  final DateTime createdAt;
+  final String semester;
+  final String teacherId;
+  final String? imgUrl;
+  final DateTime? createdAt;
 
   StudentModel({
     required this.id,
     required this.name,
-    required this.email,
     required this.rollNo,
-    required this.department,
     required this.semester,
-    required this.phone,
-    required this.createdAt,
+    required this.teacherId,
+    this.imgUrl,
+    this.createdAt,
   });
 
   /// Send data to Firestore
@@ -26,12 +24,11 @@ class StudentModel {
     return {
       "id": id,
       "name": name,
-      "email": email,
       "rollNo": rollNo,
-      "department": department,
       "semester": semester,
-      "phone": phone,
+      "teacherId": teacherId,
       "createdAt": createdAt,
+      "imgUrl": imgUrl,
     };
   }
 
@@ -40,12 +37,12 @@ class StudentModel {
     return StudentModel(
       id: map["id"] ?? "",
       name: map["name"] ?? "",
-      email: map["email"] ?? "",
       rollNo: map["rollNo"] ?? "",
-      department: map["department"] ?? "",
       semester: map["semester"] ?? 0,
-      phone: map["phone"] ?? "",
-      createdAt: (map["createdAt"] as Timestamp).toDate(),
+      teacherId: map['teacherId'] ?? '',
+      createdAt: map["createdAt"] != null
+          ? (map["createdAt"] as Timestamp).toDate()
+          : DateTime.now(),
     );
   }
 }

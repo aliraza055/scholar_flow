@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:scholar_flow/Models/student_model.dart';
+import 'package:scholar_flow/Services/firebase_services.dart';
 import 'package:scholar_flow/widgets/app_bar.dart';
+import 'package:scholar_flow/widgets/flutter_toast.dart';
 
 class AttendanceScreen extends StatefulWidget {
   @override
@@ -7,11 +10,7 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
-  List<Map<String, dynamic>> students = [
-    {"name": "Dil Rubaz", "id": "F22NDOCS1M1004", "present": true},
-    {"name": "Amber", "id": "F22NDOCS1M1005", "present": true},
-    {"name": "Laiba", "id": "F22NDOCS1M1006", "present": true},
-  ];
+  final FirebaseServices _service = FirebaseServices();
 
   @override
   Widget build(BuildContext context) {
@@ -95,55 +94,83 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
             /// Student List
             Expanded(
-              child: ListView.builder(
-                itemCount: students.length,
-                itemBuilder: (context, index) {
-                  var student = students[index];
-                  return Container(
-                    margin: EdgeInsets.only(bottom: 12),
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.grey.shade300,
-                          child: Icon(Icons.person, color: Color(0xFF006692)),
-                        ),
-                        SizedBox(width: 12),
+              child: StreamBuilder<List<StudentModel>>(
+                stream: _service.streamStudents(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    ToastError().showToast(
+                      message: 'Something went wrong',
+                      bgColor: Colors.red,
+                    );
+                  }
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    ToastError().showToast(
+                      message: 'Something went wrong',
+                      bgColor: Colors.red,
+                    );
+                  }
+                  final students = snapshot.data!;
 
-                        /// Name + ID
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                student["name"],
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                "${student["id"]}",
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ],
-                          ),
+                  return ListView.builder(
+                    itemCount: students.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: EdgeInsets.only(bottom: 12),
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
                         ),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.grey.shade300,
+                              child: Icon(
+                                Icons.person,
+                                color: Color(0xFF006692),
+                              ),
+                            ),
+                            SizedBox(width: 12),
 
-                        /// Switch
-                        Switch(
-                          value: student["present"],
-                          activeColor: Colors.white, // button (thumb)
-                          activeTrackColor: Color(0xFF006692), // ON background
-                          onChanged: (val) {
-                            setState(() {
-                              student["present"] = val;
-                            });
-                          },
+                            /// Name + ID
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    students[index].name,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    students[index].rollNo,
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            /// Switch
+                            // Switch(
+                            //   value: student["present"],
+                            //   activeColor: Colors.white, // button (thumb)
+                            //   activeTrackColor: Color(
+                            //     0xFF006692,
+                            //   ), // ON background
+                            //   onChanged: (val) {
+                            //     setState(() {
+                            //       student["present"] = val;
+                            //     });
+                            //   },
+                            // ),
+                          ],
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   );
                 },
               ),
