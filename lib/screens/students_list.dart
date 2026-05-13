@@ -319,7 +319,7 @@ class _StudentCard extends StatelessWidget {
                   child: const Icon(
                     Icons.chevron_right_rounded,
                     color: Color(0xFF8A97A5),
-                    size: 20,
+                    size: 18,
                   ),
                 ),
               ],
