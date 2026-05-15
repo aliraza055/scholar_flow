@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scholar_flow/Core/Routers/app_routers.dart';
 import 'package:scholar_flow/Models/student_model.dart';
 import 'package:scholar_flow/Services/firebase_services.dart';
 
@@ -57,9 +58,7 @@ class _StudentsState extends State<Students> {
                   ),
                   // Add student button
                   GestureDetector(
-                    onTap: () {
-                      // navigate to add student
-                    },
+                    onTap: () {},
                     child: Container(
                       width: 46,
                       height: 46,
@@ -183,9 +182,21 @@ class _StudentsState extends State<Students> {
                     padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
                     itemCount: students.length,
                     itemBuilder: (context, index) {
-                      return _StudentCard(
-                        student: students[index],
-                        index: index,
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            AppRouters.record,
+                            arguments: {
+                              'studentId': students[index].id,
+                              'studentName': students[index].name,
+                            },
+                          );
+                        },
+                        child: _StudentCard(
+                          student: students[index],
+                          index: index,
+                        ),
                       );
                     },
                   );
@@ -237,93 +248,87 @@ class _StudentCard extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(18),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(18),
-          onTap: () {
-            // navigate to student detail
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                // Avatar
-                Container(
-                  width: 52,
-                  height: 52,
-                  decoration: BoxDecoration(
-                    color: _avatarColor.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: student.imgUrl != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(14),
-                          child: Image.network(
-                            student.imgUrl!,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : Center(
-                          child: Text(
-                            student.name.isNotEmpty
-                                ? student.name[0].toUpperCase()
-                                : '?',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
-                              color: _avatarColor,
-                            ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              // Avatar
+              Container(
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
+                  color: _avatarColor.withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: student.imgUrl != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(14),
+                        child: Image.network(
+                          student.imgUrl!,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : Center(
+                        child: Text(
+                          student.name.isNotEmpty
+                              ? student.name[0].toUpperCase()
+                              : '?',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: _avatarColor,
                           ),
                         ),
-                ),
-                const SizedBox(width: 14),
+                      ),
+              ),
+              const SizedBox(width: 14),
 
-                // Info
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        student.name,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF1A2433),
+              // Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      student.name,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF1A2433),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        _InfoChip(
+                          icon: Icons.tag_rounded,
+                          label: student.rollNo,
                         ),
-                      ),
-                      const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          _InfoChip(
-                            icon: Icons.tag_rounded,
-                            label: student.rollNo,
-                          ),
-                          const SizedBox(width: 8),
-                          _InfoChip(
-                            icon: Icons.layers_rounded,
-                            label: 'Sem ${student.semester}',
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        const SizedBox(width: 8),
+                        _InfoChip(
+                          icon: Icons.layers_rounded,
+                          label: 'Sem ${student.semester}',
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
+              ),
 
-                // Arrow
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFECF0F5),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(
-                    Icons.chevron_right_rounded,
-                    color: Color(0xFF8A97A5),
-                    size: 18,
-                  ),
+              // Arrow
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFECF0F5),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              ],
-            ),
+                child: const Icon(
+                  Icons.chevron_right_rounded,
+                  color: Color(0xFF8A97A5),
+                  size: 18,
+                ),
+              ),
+            ],
           ),
         ),
       ),

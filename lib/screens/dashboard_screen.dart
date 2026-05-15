@@ -71,7 +71,14 @@ class _DashboardViewState extends State<DashboardView> {
 
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, AppRouters.record);
+                // Navigator.pushNamed(
+                //   context,
+                //   AppRouters.record,
+                //   arguments: {
+                //     'studentId': student.id, // 👈 Ab yeh empty nahi hoga
+                //     'studentName': student.name,
+                //   },
+                // );
               },
               child: SimpleTile(
                 title: 'Enter Assignment Marks',

@@ -33,9 +33,9 @@ class StudentModel {
   }
 
   /// Get data FROM Firestore
-  factory StudentModel.fromMap(Map<String, dynamic> map) {
+  factory StudentModel.fromMap(Map<String, dynamic> map, String docId) {
     return StudentModel(
-      id: map["id"] ?? "",
+      id: docId,
       name: map["name"] ?? "",
       rollNo: map["rollNo"] ?? "",
       semester: map["semester"] ?? 0,

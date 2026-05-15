@@ -44,7 +44,7 @@ class FirebaseServices {
         .snapshots()
         .map((snapshot) {
           return snapshot.docs.map((doc) {
-            return StudentModel.fromMap(doc.data());
+            return StudentModel.fromMap(doc.data(), doc.id);
           }).toList();
         });
   }

@@ -47,7 +47,13 @@ class AppRouters {
         return MaterialPageRoute(builder: (_) => PerformanceAnalyticsPage());
 
       case record:
-        return MaterialPageRoute(builder: (_) => const RecordAchievementPage());
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (_) => AddMarksPage(
+            studentId: args?['studentId'] ?? '',
+            studentName: args?['studentName'] ?? '',
+          ),
+        );
 
       default:
         return MaterialPageRoute(
