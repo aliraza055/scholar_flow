@@ -54,34 +54,22 @@ class FirebaseServices {
   /// [attendanceMap] = { studentId: AttendanceStatus }
   Future<void> submitAttendance({
     required Map<String, AttendanceStatus> attendanceMap,
-    required List<StudentModel> students,
   }) async {
     final teacherId = FirebaseAuth.instance.currentUser!.uid;
-
-    // Aaj ki date — time hata ke sirf date rakho
     final today = DateTime.now();
     final dateOnly = DateTime(today.year, today.month, today.day);
 
-    // Batch write — ek baar mein sab save hoga
-    final batch = FirebaseFirestore.instance.batch();
+    final docId = "${teacherId}_${dateOnly.toIso8601String().split('T')[0]}";
 
-    for (final student in students) {
-      final docRef = FirebaseFirestore.instance.collection('Attendance').doc();
+    final docRef = FirebaseFirestore.instance
+        .collection('Attendance')
+        .doc(docId);
 
-      final record = AttendanceModel(
-        id: docRef.id,
-        studentId: student.id,
-        studentName: student.name,
-        rollNo: student.rollNo,
-        teacherId: teacherId,
-        status: attendanceMap[student.id] ?? AttendanceStatus.absent,
-        date: dateOnly,
-      );
-
-      batch.set(docRef, record.toMap());
-    }
-
-    await batch.commit();
+    await docRef.set({
+      'teacherId': teacherId,
+      'date': dateOnly,
+      'records': attendanceMap.map((k, v) => MapEntry(k, v.name)),
+    });
   }
 
   /// Kisi student ki attendance history lana
@@ -101,17 +89,15 @@ class FirebaseServices {
   Future<bool> isAttendanceSubmittedToday() async {
     final teacherId = FirebaseAuth.instance.currentUser!.uid;
     final today = DateTime.now();
-    final start = DateTime(today.year, today.month, today.day);
-    final end = start.add(const Duration(days: 1));
+    final dateKey = "${today.year}-${today.month}-${today.day}";
 
-    final snap = await FirebaseFirestore.instance
+    final docId = "${teacherId}_$dateKey";
+
+    final doc = await FirebaseFirestore.instance
         .collection('Attendance')
-        .where('teacherId', isEqualTo: teacherId)
-        .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(start))
-        .where('date', isLessThan: Timestamp.fromDate(end))
-        .limit(1)
+        .doc(docId)
         .get();
 
-    return snap.docs.isNotEmpty;
+    return doc.exists;
   }
 }
