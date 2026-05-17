@@ -46,40 +46,77 @@ class _DashboardViewState extends State<DashboardView> {
             const SizedBox(height: 28),
 
             // ── Quick Actions ──
-            const _SectionHeader(title: 'Quick Actions'),
+            // const _SectionHeader(title: 'Quick Actions'),
+            //  const SizedBox(height: 14),
+            Row(
+              children: [
+                Container(
+                  width: 4,
+                  height: 18,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF0F2041), Color(0xFF1A3A6E)],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                const Text(
+                  'Quick Actions',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF0D1B2A),
+                    letterSpacing: -0.3,
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 14),
 
-            GestureDetector(
+            // ── Add Student ───────────────────────────────────────────
+            SimpleTile(
+              title: 'Add Student',
+              subtitle: 'Enroll new scholars into the system',
+              icon: Icons.person_add_rounded,
+              iconBgColor: const Color(0xFFE8F5E9),
+              iconColor: const Color(0xFF0F9E7B),
               onTap: () => Navigator.pushNamed(context, AppRouters.addNew),
-              child: const SimpleTile(
-                title: 'Add Student',
-                subtitle: 'Enroll new scholars into the system',
-                icon: Icons.person_add_rounded,
-                backgroundColor: Color(0xFFEFFAF0),
-              ),
             ),
             const SizedBox(height: 10),
 
-            GestureDetector(
+            // ── Enter Marks ───────────────────────────────────────────
+            SimpleTile(
+              title: 'Enter Marks',
+              subtitle: 'Record Mid-term & Final exam marks',
+              icon: Icons.edit_note_rounded,
+              iconBgColor: const Color(0xFFFFF3E0),
+              iconColor: const Color(0xFFD4522A),
               onTap: () => Navigator.pushNamed(context, AppRouters.students),
-              child: const SimpleTile(
-                title: 'Enter Marks',
-                subtitle: 'Record Mid-term & Final exam marks',
-                icon: Icons.assignment_rounded,
-                backgroundColor: Color(0xFFFFF4E6),
-              ),
             ),
             const SizedBox(height: 10),
 
-            GestureDetector(
-              onTap: () => Navigator.pushNamed(context, AppRouters.performance),
-              child: const SimpleTile(
-                title: 'View Performance',
-                subtitle: 'Analytics for Mid-term results',
-                icon: Icons.trending_up_rounded,
+            // ── Manage Students ───────────────────────────────────────
+            SimpleTile(
+              title: 'Manage Students',
+              subtitle: 'Edit or remove student records',
+              icon: Icons.group_rounded,
+              iconBgColor: const Color(0xFFEDE7F6),
+              iconColor: const Color(0xFF7C3AED),
+              onTap: () => Navigator.pushNamed(context, AppRouters.manage),
+            ),
+            const SizedBox(height: 10),
 
-                backgroundColor: Color(0xFFEFF2FF),
-              ),
+            // ── View Performance ──────────────────────────────────────
+            SimpleTile(
+              title: 'View Performance',
+              subtitle: 'Analytics for Mid-term results',
+              icon: Icons.trending_up_rounded,
+              iconBgColor: const Color(0xFFE8EAF6),
+              iconColor: const Color(0xFF3B5FD4),
+              onTap: () => Navigator.pushNamed(context, AppRouters.performance),
             ),
             const SizedBox(height: 28),
 

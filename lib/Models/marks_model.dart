@@ -42,8 +42,8 @@ class MarksModel {
     if (total >= 80) return 'B+';
     if (total >= 75) return 'B';
     if (total >= 70) return 'C+';
-    if (total >= 65) return 'C';
-    if (total >= 60) return 'D';
+    if (total >= 60) return 'C';
+    if (total >= 50) return 'D';
     return 'F';
   }
 

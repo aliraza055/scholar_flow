@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:scholar_flow/Models/marks_model.dart';
 import 'package:scholar_flow/Services/marks_services.dart';
+import 'package:scholar_flow/widgets/flutter_toast.dart';
 
 class AddMarksPage extends StatefulWidget {
   final String studentId;
@@ -30,7 +32,6 @@ class _AddMarksPageState extends State<AddMarksPage> {
   ];
   String _selectedSubject = 'SQA';
 
-  // ── Live preview state ──
   double? _previewTotal;
   String? _previewGrade;
 
@@ -65,20 +66,21 @@ class _AddMarksPageState extends State<AddMarksPage> {
     super.dispose();
   }
 
-  // ── All original save logic preserved ──
   Future<void> _save() async {
     final mid = double.tryParse(_midCtrl.text);
     final fin = double.tryParse(_finalCtrl.text);
 
     if (mid == null || fin == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Valid marks enter karo')));
+      ToastError().showToast(
+        message: 'Enter Valid Marks!',
+        bgColor: Colors.red,
+      );
       return;
     }
     if (mid > 100 || fin > 100) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Marks 100 se zyada nahi ho sakti')),
+      ToastError().showToast(
+        message: 'Marks cannot be more than 100!',
+        bgColor: Colors.red.shade500,
       );
       return;
     }
@@ -95,9 +97,10 @@ class _AddMarksPageState extends State<AddMarksPage> {
     setState(() => _isLoading = false);
 
     if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Marks save ho gayi ✅')));
+      ToastError().showToast(
+        message: 'Marks Saved Successfully!',
+        bgColor: Colors.green,
+      );
       _midCtrl.clear();
       _finalCtrl.clear();
     }
@@ -123,287 +126,416 @@ class _AddMarksPageState extends State<AddMarksPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+      ),
+    );
+
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FA),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        surfaceTintColor: Colors.transparent,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Container(
-            margin: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF4F6FA),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: Color(0xFF0D1B2A),
-              size: 16,
-            ),
-          ),
-        ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Add Marks',
-              style: TextStyle(
-                color: Color(0xFF0D1B2A),
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Text(
-              widget.studentName,
-              style: const TextStyle(color: Color(0xFF64748B), fontSize: 12),
-            ),
-          ],
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(height: 1, color: const Color(0xFFF0F2F5)),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 24, 20, 40),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ── Subject ──
-            const _FieldLabel(text: 'Subject'),
-            const SizedBox(height: 10),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(14),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.04),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
+      body: Column(
+        children: [
+          // ── Header ──────────────────────────────────────────────────────
+          _buildHeader(context),
+
+          // ── Scrollable Body ──────────────────────────────────────────────
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // ── Subject Dropdown ────────────────────────────────────
+                  _SectionLabel(text: 'Select Subject'),
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: const Color(0xFFE8ECF4),
+                        width: 1.5,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.04),
+                          blurRadius: 10,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: _selectedSubject,
+                        isExpanded: true,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF0D1B2A),
+                        ),
+                        icon: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF1A3A6E).withOpacity(0.08),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(
+                            Icons.keyboard_arrow_down_rounded,
+                            color: Color(0xFF1A3A6E),
+                            size: 18,
+                          ),
+                        ),
+                        items: _subjects
+                            .map(
+                              (s) => DropdownMenuItem(value: s, child: Text(s)),
+                            )
+                            .toList(),
+                        onChanged: (val) =>
+                            setState(() => _selectedSubject = val!),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // ── Marks Input ─────────────────────────────────────────
+                  _SectionLabel(text: 'Enter Marks'),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _MarksInputCard(
+                          label: 'Midterm',
+                          weight: '40%',
+                          hint: '0–100',
+                          controller: _midCtrl,
+                          accentColor: const Color(0xFF1A3A6E),
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: _MarksInputCard(
+                          label: 'Final',
+                          weight: '60%',
+                          hint: '0–100',
+                          controller: _finalCtrl,
+                          accentColor: const Color(0xFF7C3AED),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  // ── Grade Preview ───────────────────────────────────────
+                  if (_previewTotal != null && _previewGrade != null) ...[
+                    const SizedBox(height: 14),
+                    _GradePreviewCard(
+                      total: _previewTotal!,
+                      grade: _previewGrade!,
+                      gradeColor: _gradeColor(_previewGrade!),
+                    ),
+                  ],
+
+                  const SizedBox(height: 28),
+
+                  // ── Save Button ─────────────────────────────────────────
+                  SizedBox(
+                    width: double.infinity,
+                    height: 54,
+                    child: ElevatedButton(
+                      onPressed: _isLoading ? null : _save,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF1A3A6E),
+                        disabledBackgroundColor: const Color(
+                          0xFF1A3A6E,
+                        ).withOpacity(0.35),
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      child: _isLoading
+                          ? const SizedBox(
+                              width: 22,
+                              height: 22,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2.5,
+                              ),
+                            )
+                          : const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.save_rounded,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Save Marks',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: -0.2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  // ── Saved Marks Header ──────────────────────────────────
+                  Row(
+                    children: [
+                      Container(
+                        width: 4,
+                        height: 18,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF0F2041), Color(0xFF1A3A6E)],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      const Text(
+                        'Saved Marks',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF0D1B2A),
+                          letterSpacing: -0.3,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+
+                  // ── Saved Marks Stream ──────────────────────────────────
+                  StreamBuilder(
+                    stream: _marksService.getMarksStream(widget.studentId),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(24),
+                            child: CircularProgressIndicator(
+                              color: Color(0xFF1A3A6E),
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        );
+                      }
+
+                      final docs = snapshot.data!.docs;
+
+                      if (docs.isEmpty) {
+                        return Container(
+                          padding: const EdgeInsets.all(28),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(18),
+                            border: Border.all(color: const Color(0xFFE8ECF4)),
+                          ),
+                          child: const Center(
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.assignment_outlined,
+                                  size: 42,
+                                  color: Color(0xFFB0BEC5),
+                                ),
+                                SizedBox(height: 10),
+                                Text(
+                                  'No marks saved yet',
+                                  style: TextStyle(
+                                    color: Color(0xFF64748B),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+
+                      return Column(
+                        children: docs.map((doc) {
+                          final d = doc.data() as Map<String, dynamic>;
+                          return _SavedMarkCard(
+                            data: d,
+                            gradeColor: _gradeColor(d['grade'] ?? 'F'),
+                          );
+                        }).toList(),
+                      );
+                    },
                   ),
                 ],
               ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: _selectedSubject,
-                  isExpanded: true,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF0D1B2A),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Header ─────────────────────────────────────────────────────────────────
+
+  Widget _buildHeader(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(20, 32, 20, 28),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFF0F2041), Color(0xFF1A3A6E)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
+      ),
+      child: Stack(
+        children: [
+          // Decorative circles
+          Positioned(
+            right: -18,
+            top: -18,
+            child: Container(
+              width: 110,
+              height: 110,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.06),
+              ),
+            ),
+          ),
+          Positioned(
+            right: 40,
+            bottom: -30,
+            child: Container(
+              width: 70,
+              height: 70,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.04),
+              ),
+            ),
+          ),
+
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Top row: back button + icon badge
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      width: 46,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.15),
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                    ),
                   ),
-                  icon: Container(
-                    padding: const EdgeInsets.all(6),
+                  Container(
+                    width: 46,
+                    height: 46,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1A73E8).withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.white.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: Colors.white.withOpacity(0.15)),
                     ),
                     child: const Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      color: Color(0xFF1A73E8),
-                      size: 18,
+                      Icons.edit_note_rounded,
+                      color: Colors.white,
+                      size: 24,
                     ),
                   ),
-                  items: _subjects
-                      .map((s) => DropdownMenuItem(value: s, child: Text(s)))
-                      .toList(),
-                  onChanged: (val) => setState(() => _selectedSubject = val!),
+                ],
+              ),
+
+              const SizedBox(height: 16),
+
+              // Title
+              const Text(
+                'Add Marks',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.4,
                 ),
               ),
-            ),
-            const SizedBox(height: 24),
+              const SizedBox(height: 5),
+              Text(
+                widget.studentName,
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.6),
+                  fontSize: 13,
+                  height: 1.4,
+                ),
+              ),
 
-            // ── Marks Input Row ──
-            const _FieldLabel(text: 'Marks'),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: _MarksInputCard(
+              const SizedBox(height: 18),
+
+              // Stats row
+              Row(
+                children: [
+                  _HeaderStat(
                     label: 'Midterm',
-                    weight: '40%',
-                    hint: '0–100',
-                    controller: _midCtrl,
-                    accentColor: const Color(0xFF1A73E8),
+                    value: '40%',
+                    icon: Icons.history_edu_rounded,
                   ),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: _MarksInputCard(
+                  const SizedBox(width: 10),
+                  _HeaderStat(
                     label: 'Final',
-                    weight: '60%',
-                    hint: '0–100',
-                    controller: _finalCtrl,
-                    accentColor: const Color(0xFF7C3AED),
+                    value: '60%',
+                    icon: Icons.school_rounded,
+                    valueColor: const Color(0xFF818CF8),
                   ),
-                ),
-              ],
-            ),
-
-            // ── Live Grade Preview ──
-            if (_previewTotal != null && _previewGrade != null) ...[
-              const SizedBox(height: 16),
-              _GradePreviewCard(
-                total: _previewTotal!,
-                grade: _previewGrade!,
-                gradeColor: _gradeColor(_previewGrade!),
+                  const SizedBox(width: 10),
+                  _HeaderStat(
+                    label: 'Pass',
+                    value: '≥50%',
+                    icon: Icons.check_circle_outline_rounded,
+                    valueColor: const Color(0xFF4ADE80),
+                  ),
+                ],
               ),
             ],
-
-            const SizedBox(height: 28),
-
-            // ── Save Button ──
-            SizedBox(
-              width: double.infinity,
-              height: 54,
-              child: ElevatedButton(
-                onPressed: _isLoading ? null : _save,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1A73E8),
-                  disabledBackgroundColor: const Color(
-                    0xFF1A73E8,
-                  ).withOpacity(0.5),
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-                child: _isLoading
-                    ? const SizedBox(
-                        width: 22,
-                        height: 22,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2.5,
-                        ),
-                      )
-                    : const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.save_rounded,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            'Save Marks',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
-              ),
-            ),
-
-            const SizedBox(height: 32),
-
-            // ── Saved Marks List ──
-            Row(
-              children: [
-                Container(
-                  width: 4,
-                  height: 18,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF1A73E8), Color(0xFF0D47A1)],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                const Text(
-                  'Saved Marks',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF0D1B2A),
-                    letterSpacing: -0.2,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-
-            StreamBuilder(
-              stream: _marksService.getMarksStream(widget.studentId),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(24),
-                      child: CircularProgressIndicator(
-                        color: Color(0xFF1A73E8),
-                        strokeWidth: 2,
-                      ),
-                    ),
-                  );
-                }
-
-                final docs = snapshot.data!.docs;
-
-                if (docs.isEmpty) {
-                  return Container(
-                    padding: const EdgeInsets.all(28),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: const Center(
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.assignment_outlined,
-                            size: 42,
-                            color: Color(0xFFB0BEC5),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'No marks saved yet',
-                            style: TextStyle(
-                              color: Color(0xFF64748B),
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-
-                return Column(
-                  children: docs.map((doc) {
-                    final d = doc.data() as Map<String, dynamic>;
-                    return _SavedMarkCard(
-                      data: d,
-                      gradeColor: _gradeColor(d['grade'] ?? 'F'),
-                    );
-                  }).toList(),
-                );
-              },
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
-// ── Field Label ────────────────────────────────────────────────────────────
+// ── Section Label ─────────────────────────────────────────────────────────────
 
-class _FieldLabel extends StatelessWidget {
+class _SectionLabel extends StatelessWidget {
   final String text;
-  const _FieldLabel({required this.text});
+  const _SectionLabel({required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -413,13 +545,71 @@ class _FieldLabel extends StatelessWidget {
         fontSize: 12,
         fontWeight: FontWeight.w700,
         color: Color(0xFF64748B),
-        letterSpacing: 0.3,
+        letterSpacing: 0.4,
       ),
     );
   }
 }
 
-// ── Marks Input Card ───────────────────────────────────────────────────────
+// ── Header Stat ───────────────────────────────────────────────────────────────
+
+class _HeaderStat extends StatelessWidget {
+  final String label;
+  final String value;
+  final IconData icon;
+  final Color? valueColor;
+
+  const _HeaderStat({
+    required this.label,
+    required this.value,
+    required this.icon,
+    this.valueColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.10),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.white.withOpacity(0.12)),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 14, color: Colors.white.withOpacity(0.7)),
+            const SizedBox(width: 7),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                    color: valueColor ?? Colors.white,
+                    height: 1,
+                  ),
+                ),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Colors.white.withOpacity(0.55),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ── Marks Input Card ──────────────────────────────────────────────────────────
 
 class _MarksInputCard extends StatelessWidget {
   final String label;
@@ -443,11 +633,12 @@ class _MarksInputCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFFE8ECF4), width: 1.5),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.04),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -468,7 +659,7 @@ class _MarksInputCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
-                  color: accentColor.withOpacity(0.1),
+                  color: accentColor.withOpacity(0.10),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -519,7 +710,7 @@ class _MarksInputCard extends StatelessWidget {
   }
 }
 
-// ── Grade Preview Card ─────────────────────────────────────────────────────
+// ── Grade Preview Card ────────────────────────────────────────────────────────
 
 class _GradePreviewCard extends StatelessWidget {
   final double total;
@@ -537,7 +728,7 @@ class _GradePreviewCard extends StatelessWidget {
     final isPassing = total >= 50;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: gradeColor.withOpacity(0.06),
         borderRadius: BorderRadius.circular(18),
@@ -546,8 +737,8 @@ class _GradePreviewCard extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 56,
-            height: 56,
+            width: 52,
+            height: 52,
             decoration: BoxDecoration(
               color: gradeColor.withOpacity(0.15),
               shape: BoxShape.circle,
@@ -563,7 +754,7 @@ class _GradePreviewCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -571,16 +762,16 @@ class _GradePreviewCard extends StatelessWidget {
                 Text(
                   'Projected Grade',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 11,
                     color: gradeColor.withOpacity(0.7),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 3),
                 Text(
                   'Total: ${total.toStringAsFixed(1)}%',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: FontWeight.w700,
                     color: gradeColor,
                   ),
@@ -609,7 +800,7 @@ class _GradePreviewCard extends StatelessWidget {
   }
 }
 
-// ── Saved Mark Card ────────────────────────────────────────────────────────
+// ── Saved Mark Card ───────────────────────────────────────────────────────────
 
 class _SavedMarkCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -621,10 +812,11 @@ class _SavedMarkCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFFE8ECF4), width: 1.5),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.04),
@@ -635,13 +827,13 @@ class _SavedMarkCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // ── Grade Badge ──
+          // Grade badge
           Container(
-            width: 44,
-            height: 44,
+            width: 46,
+            height: 46,
             decoration: BoxDecoration(
-              color: gradeColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
+              color: gradeColor.withOpacity(0.10),
+              borderRadius: BorderRadius.circular(14),
             ),
             child: Center(
               child: Text(
@@ -655,7 +847,8 @@ class _SavedMarkCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 14),
-          // ── Subject + Chips ──
+
+          // Subject + chips
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -666,6 +859,7 @@ class _SavedMarkCard extends StatelessWidget {
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF0D1B2A),
+                    letterSpacing: -0.2,
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -691,7 +885,7 @@ class _SavedMarkCard extends StatelessWidget {
   }
 }
 
-// ── Mark Chip ──────────────────────────────────────────────────────────────
+// ── Mark Chip ─────────────────────────────────────────────────────────────────
 
 class _MarkChip extends StatelessWidget {
   final String label;
@@ -710,7 +904,7 @@ class _MarkChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
         color: highlight
-            ? const Color(0xFF1A73E8).withOpacity(0.08)
+            ? const Color(0xFF1A3A6E).withOpacity(0.08)
             : const Color(0xFFF4F6FA),
         borderRadius: BorderRadius.circular(8),
       ),
@@ -719,7 +913,7 @@ class _MarkChip extends StatelessWidget {
         style: TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w600,
-          color: highlight ? const Color(0xFF1A73E8) : const Color(0xFF64748B),
+          color: highlight ? const Color(0xFF1A3A6E) : const Color(0xFF64748B),
         ),
       ),
     );

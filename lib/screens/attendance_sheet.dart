@@ -75,26 +75,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           message: 'Attendance submitted successfully!',
           bgColor: Colors.green,
         );
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   SnackBar(
-        //     content: const Row(
-        //       children: [
-        //         Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
-        //         SizedBox(width: 10),
-        //         Text(
-        //           'Attendance submitted successfully!',
-        //           style: TextStyle(fontWeight: FontWeight.w600),
-        //         ),
-        //       ],
-        //     ),
-        //     backgroundColor: const Color(0xFF14B870),
-        //     behavior: SnackBarBehavior.floating,
-        //     shape: RoundedRectangleBorder(
-        //       borderRadius: BorderRadius.circular(12),
-        //     ),
-        //     margin: const EdgeInsets.all(16),
-        //   ),
-        //);
       }
     } catch (e) {
       setState(() => _isSubmitting = false);
@@ -125,6 +105,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
     final today = DateFormat('MMMM dd, yyyy').format(DateTime.now());
 
+    // ── How much bottom space the floating nav bar takes ──────────────────
+    // nav margin-bottom(20) + vertical-padding(10+10) + item-height(~40) = ~80
+    // + device safe-area bottom padding
+    final double navBarOffset = 80.0 + MediaQuery.of(context).padding.bottom;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FA),
       body: StreamBuilder<List<StudentModel>>(
@@ -135,7 +120,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
           return Column(
             children: [
-              // ── Header (Performance page style) ──────────────────────
+              // ── Header ────────────────────────────────────────────────
               _buildHeader(today, students.length),
               const SizedBox(height: 16),
 
@@ -190,7 +175,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                     : students.isEmpty
                     ? _buildEmptyState()
                     : ListView.builder(
-                        padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+                        // ✅ FIX: bottom padding keeps last card above
+                        // the submit button which itself sits above nav bar
+                        padding: EdgeInsets.fromLTRB(
+                          20,
+                          4,
+                          20,
+                          navBarOffset + 70,
+                        ),
                         physics: const BouncingScrollPhysics(),
                         itemCount: students.length,
                         itemBuilder: (context, index) {
@@ -208,7 +200,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               ),
 
               // ── Submit Button ─────────────────────────────────────────
-              _buildSubmitButton(students),
+              _buildSubmitButton(students, navBarOffset),
             ],
           );
         },
@@ -232,7 +224,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       ),
       child: Stack(
         children: [
-          // Decorative circle
           Positioned(
             right: -18,
             top: -18,
@@ -257,11 +248,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               ),
             ),
           ),
-
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top row: icon + date pill
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -311,10 +300,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 16),
-
-              // Title
               const Text(
                 'Class Attendance',
                 style: TextStyle(
@@ -333,10 +319,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   height: 1.4,
                 ),
               ),
-
               const SizedBox(height: 18),
-
-              // Stats row
               ValueListenableBuilder<int>(
                 valueListenable: _presentCount,
                 builder: (_, count, __) {
@@ -374,8 +357,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   }
 
   // ── Submit Button ─────────────────────────────────────────────────────────
+  // ✅ FIX: bottom padding = navBarOffset so button sits just above the nav bar
 
-  Widget _buildSubmitButton(List<StudentModel> students) {
+  Widget _buildSubmitButton(List<StudentModel> students, double navBarOffset) {
     return ValueListenableBuilder<int>(
       valueListenable: _presentCount,
       builder: (_, count, __) {
@@ -383,7 +367,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             _alreadySubmitted || _isSubmitting || students.isEmpty;
 
         return Padding(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+          padding: EdgeInsets.fromLTRB(20, 8, 20, navBarOffset + 8),
           child: SizedBox(
             width: double.infinity,
             height: 54,
@@ -469,7 +453,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   }
 }
 
-// ── Header Stat Widget ────────────────────────────────────────────────────────
+// ── Header Stat ───────────────────────────────────────────────────────────────
 
 class _HeaderStat extends StatelessWidget {
   final String label;
@@ -584,7 +568,6 @@ class _AttendanceCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             child: Row(
               children: [
-                // Avatar
                 Container(
                   width: 46,
                   height: 46,
@@ -610,8 +593,6 @@ class _AttendanceCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-
-                // Name + Roll
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -637,8 +618,6 @@ class _AttendanceCard extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                // Status badge
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
@@ -662,8 +641,6 @@ class _AttendanceCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-
-                // Switch
                 Switch(
                   value: isPresent,
                   onChanged: disabled

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scholar_flow/screens/attendance_sheet.dart';
 import 'package:scholar_flow/screens/dashboard_screen.dart';
+import 'package:scholar_flow/screens/manage_student.dart';
 import 'package:scholar_flow/screens/new_entry.dart';
 import 'package:scholar_flow/screens/onboard.dart';
 import 'package:scholar_flow/screens/performance_analysis.dart';
@@ -21,6 +22,7 @@ class AppRouters {
   static const record = '/record';
   static const performance = '/performance';
   static const students = '/students';
+  static const manage = '/manage';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -42,6 +44,8 @@ class AppRouters {
         return MaterialPageRoute(builder: (_) => Students());
       case addNew:
         return MaterialPageRoute(builder: (_) => NewEntryScreen());
+      case manage:
+        return MaterialPageRoute(builder: (_) => ManageStudentsPage());
 
       case performance:
         return MaterialPageRoute(builder: (_) => PerformanceAnalyticsPage());

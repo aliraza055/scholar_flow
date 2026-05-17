@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scholar_flow/Core/Routers/app_routers.dart';
 import 'package:scholar_flow/Models/student_model.dart';
 import 'package:scholar_flow/Services/firebase_services.dart';
+import 'package:scholar_flow/widgets/student_card.dart';
 
 class Students extends StatefulWidget {
   const Students({super.key});
@@ -18,78 +19,76 @@ class _StudentsState extends State<Students> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FA),
-      body: SafeArea(
-        child: StreamBuilder<List<StudentModel>>(
-          stream: _service.streamStudents(),
-          builder: (context, snapshot) {
-            final students = snapshot.data ?? [];
-            final count = students.length;
+      body: StreamBuilder<List<StudentModel>>(
+        stream: _service.streamStudents(),
+        builder: (context, snapshot) {
+          final students = snapshot.data ?? [];
+          final count = students.length;
 
-            // ── Apply search filter ──
-            final filtered = students.where((s) {
-              if (_searchQuery.isEmpty) return true;
-              return s.name.toLowerCase().contains(_searchQuery) ||
-                  s.rollNo.toLowerCase().contains(_searchQuery);
-            }).toList();
+          // ── Apply search filter ──
+          final filtered = students.where((s) {
+            if (_searchQuery.isEmpty) return true;
+            return s.name.toLowerCase().contains(_searchQuery) ||
+                s.rollNo.toLowerCase().contains(_searchQuery);
+          }).toList();
 
-            return Column(
-              children: [
-                // ── Gradient Header ──
-                _Header(count: count),
+          return Column(
+            children: [
+              // ── Gradient Header ──
+              _Header(count: count),
 
-                // ── Floating Search Bar ──
-                _SearchBar(
-                  onChanged: (v) =>
-                      setState(() => _searchQuery = v.toLowerCase()),
+              // ── Floating Search Bar ──
+              _SearchBar(
+                onChanged: (v) =>
+                    setState(() => _searchQuery = v.toLowerCase()),
+              ),
+              const SizedBox(height: 12),
+
+              // ── Section Label ──
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 4,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF0F2041), Color(0xFF1A3A6E)],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      'All Students',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF0D1B2A),
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '$count total',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF64748B),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 12),
+              ),
+              const SizedBox(height: 10),
 
-                // ── Section Label ──
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 4,
-                        height: 16,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF1A73E8), Color(0xFF0D47A1)],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      const Text(
-                        'All Students',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF0D1B2A),
-                        ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        '$count total',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Color(0xFF64748B),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-
-                // ── List / States ──
-                Expanded(child: _buildBody(snapshot, filtered)),
-              ],
-            );
-          },
-        ),
+              // ── List / States ──
+              Expanded(child: _buildBody(snapshot, filtered)),
+            ],
+          );
+        },
       ),
     );
   }
@@ -137,7 +136,7 @@ class _StudentsState extends State<Students> {
       itemCount: filtered.length,
       itemBuilder: (context, index) {
         final student = filtered[index];
-        return _StudentCard(
+        return StudentCard(
           student: student,
           index: index,
           onTap: () => Navigator.pushNamed(
@@ -161,10 +160,10 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 36),
+      padding: const EdgeInsets.fromLTRB(20, 36, 20, 36),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFF1A73E8), Color(0xFF0D47A1)],
+          colors: [Color(0xFF0F2041), Color(0xFF1A3A6E)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -256,7 +255,7 @@ class _Header extends StatelessWidget {
               ),
               const SizedBox(height: 18),
               const Text(
-                'My Students',
+                'Add Marks of Students',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
@@ -357,182 +356,6 @@ class _SearchBar extends StatelessWidget {
     );
   }
 }
-
-// ── Student Card ───────────────────────────────────────────────────────────
-
-class _StudentCard extends StatelessWidget {
-  final StudentModel student;
-  final int index;
-  final VoidCallback onTap;
-
-  const _StudentCard({
-    required this.student,
-    required this.index,
-    required this.onTap,
-  });
-
-  // Each student gets a unique gradient based on index
-  List<Color> get _gradient {
-    final gradients = [
-      [const Color(0xFF1A73E8), const Color(0xFF0D47A1)],
-      [const Color(0xFF7C3AED), const Color(0xFF4C1D95)],
-      [const Color(0xFF10B981), const Color(0xFF059669)],
-      [const Color(0xFFF59E0B), const Color(0xFFD97706)],
-      [const Color(0xFFEF4444), const Color(0xFFB91C1C)],
-    ];
-    return gradients[index % gradients.length];
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Material(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20),
-          onTap: onTap,
-          splashColor: const Color(0xFF1A73E8).withOpacity(0.05),
-          highlightColor: const Color(0xFF1A73E8).withOpacity(0.03),
-          child: Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
-                  blurRadius: 12,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                // ── Gradient Avatar ──
-                Container(
-                  width: 54,
-                  height: 54,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: _gradient,
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: student.imgUrl != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.network(
-                            student.imgUrl!,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : Center(
-                          child: Text(
-                            student.name.isNotEmpty
-                                ? student.name[0].toUpperCase()
-                                : '?',
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                ),
-                const SizedBox(width: 14),
-
-                // ── Info ──
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        student.name,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF0D1B2A),
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          _Chip(
-                            icon: Icons.badge_outlined,
-                            label: student.rollNo,
-                          ),
-                          const SizedBox(width: 6),
-                          _Chip(
-                            icon: Icons.layers_outlined,
-                            label: 'Sem ${student.semester}',
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
-                // ── Arrow ──
-                Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF4F6FA),
-                    borderRadius: BorderRadius.circular(11),
-                  ),
-                  child: const Icon(
-                    Icons.chevron_right_rounded,
-                    color: Color(0xFF64748B),
-                    size: 20,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ── Info Chip ──────────────────────────────────────────────────────────────
-
-class _Chip extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  const _Chip({required this.icon, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF4F6FA),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 12, color: const Color(0xFF64748B)),
-          const SizedBox(width: 4),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF64748B),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ── Empty State ────────────────────────────────────────────────────────────
 
 class _EmptyState extends StatelessWidget {
   final IconData icon;
