@@ -36,7 +36,10 @@ class Auth {
           )
           .then((value) {
             Navigator.pushReplacementNamed(context, AppRouters.bottomNav);
-            ToastError().showToast(message: 'Created ', bgColor: Colors.green);
+            ToastError().showToast(
+              message: 'Account created successfully! ',
+              bgColor: Colors.green,
+            );
           });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {

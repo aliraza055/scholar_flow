@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scholar_flow/Constants/app_theme.dart';
 import 'package:scholar_flow/Core/Routers/app_routers.dart';
 import 'package:scholar_flow/Services/auth_services.dart';
+import 'package:scholar_flow/widgets/auth_social.dart';
 import 'package:scholar_flow/widgets/textfeild.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -16,6 +17,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
+  bool _isLoading = false;
   final _keyform = GlobalKey<FormState>();
 
   @override
@@ -31,7 +33,6 @@ class _SignInScreenState extends State<SignInScreen> {
               children: [
                 const SizedBox(height: 48),
 
-                // Logo
                 Container(
                   width: 72,
                   height: 72,
@@ -68,6 +69,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
                 // White Card
                 Container(
+                  margin: EdgeInsets.only(bottom: 40),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(28),
@@ -135,6 +137,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           }
                           return null;
                         },
+                        obscureText: _obscurePassword,
                         controller: _passwordController,
                         hint: '••••••••',
                         icon: Icons.lock_outline_rounded,
@@ -159,13 +162,19 @@ class _SignInScreenState extends State<SignInScreen> {
                         width: double.infinity,
                         height: 56,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (_keyform.currentState!.validate()) {
-                              Auth().signIn(
+                              setState(() {
+                                _isLoading = true;
+                              });
+                              await Auth().signIn(
                                 context,
                                 _emailController.text,
                                 _passwordController.text,
                               );
+                              setState(() {
+                                _isLoading = false;
+                              });
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -176,20 +185,29 @@ class _SignInScreenState extends State<SignInScreen> {
                               borderRadius: BorderRadius.circular(28),
                             ),
                           ),
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Login',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
+                          child: _isLoading
+                              ? const SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.5,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Login',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Icon(Icons.arrow_forward_rounded, size: 20),
+                                  ],
                                 ),
-                              ),
-                              SizedBox(width: 8),
-                              Icon(Icons.arrow_forward_rounded, size: 20),
-                            ],
-                          ),
                         ),
                       ),
                       const SizedBox(height: 28),
@@ -218,106 +236,15 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 20),
                       // OR Divider
-                      const Row(
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              color: Color(0xFFD8E2EC),
-                              thickness: 1,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12),
-                            child: Text(
-                              'OR AUTHENTICATE WITH',
-                              style: AppTextStyles.subtitle,
-                            ),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              color: Color(0xFFD8E2EC),
-                              thickness: 1,
-                            ),
-                          ),
-                        ],
-                      ),
                       const SizedBox(height: 20),
-
-                      // SSO & Biometric
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _AltAuthButton(
-                              label: 'SSO',
-                              icon: Icons.cloud_outlined,
-                              onTap: () {},
-                            ),
-                          ),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            child: _AltAuthButton(
-                              label: 'Biometric',
-                              icon: Icons.fingerprint_rounded,
-                              onTap: () {},
-                            ),
-                          ),
-                        ],
-                      ),
+                      SocialLoginRow(),
                     ],
                   ),
                 ),
-                const SizedBox(height: 28),
-
-                // Footer
-                const SizedBox(height: 32),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Shared helpers ───────────────────────────────────────────────────────────
-
-class _AltAuthButton extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final VoidCallback onTap;
-
-  const _AltAuthButton({
-    required this.label,
-    required this.icon,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 52,
-        decoration: BoxDecoration(
-          color: const Color(0xFFECF0F5),
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 20, color: const Color(0xFF6B7A8D)),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF1A2433),
-              ),
-            ),
-          ],
         ),
       ),
     );

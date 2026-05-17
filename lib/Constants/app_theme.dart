@@ -2,6 +2,14 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   AppColors._();
+  static const List<Color> avatarPalette = [
+    Color(0xFF3B7DD8),
+    Color(0xFF7C5CBF),
+    Color(0xFF0F9E7B),
+    Color(0xFFD4522A),
+    Color(0xFF1A8FA8),
+    Color(0xFF9B4EA8),
+  ];
 
   static const Color primary = Color(0xFF1B5E8C);
   static const Color primaryDark = Color(0xFF134A72);

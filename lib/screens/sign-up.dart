@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:scholar_flow/Constants/app_theme.dart';
+import 'package:scholar_flow/Core/Routers/app_routers.dart';
 import 'package:scholar_flow/Services/auth_services.dart';
+import 'package:scholar_flow/widgets/auth_social.dart';
 import 'package:scholar_flow/widgets/textfeild.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -16,6 +19,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _subjectController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = false;
+  bool _isLoading = false;
   final _keyform = GlobalKey<FormState>();
 
   @override
@@ -102,7 +106,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(height: 28),
 
                       // Full Name
-                      const Text('FULL NAME', style: _labelStyle),
+                      const Text('FULL NAME', style: AppTextStyles.labelSmall),
                       const SizedBox(height: 8),
                       AppTextFormField(
                         validator: (value) {
@@ -119,7 +123,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(height: 20),
 
                       // Email
-                      const Text('EMAIL ADDRESS', style: _labelStyle),
+                      const Text(
+                        'EMAIL ADDRESS',
+                        style: AppTextStyles.labelSmall,
+                      ),
                       const SizedBox(height: 8),
                       AppTextFormField(
                         validator: (value) {
@@ -136,7 +143,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(height: 20),
 
                       // Subject
-                      const Text('SUBJECT ', style: _labelStyle),
+                      const Text('SUBJECT ', style: AppTextStyles.labelSmall),
                       const SizedBox(height: 8),
                       AppTextFormField(
                         validator: (value) {
@@ -153,7 +160,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(height: 20),
 
                       // Password
-                      const Text('PASSWORD', style: _labelStyle),
+                      const Text('PASSWORD', style: AppTextStyles.labelSmall),
                       const SizedBox(height: 8),
                       AppTextFormField(
                         validator: (value) {
@@ -162,6 +169,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           }
                           return null;
                         },
+                        obscureText: _obscurePassword,
                         controller: _passwordController,
                         hint: '••••••••',
                         icon: Icons.lock_outline_rounded,
@@ -184,15 +192,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: double.infinity,
                         height: 56,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (_keyform.currentState!.validate()) {
-                              Auth().signUp(
+                              setState(() {
+                                _isLoading = true;
+                              });
+                              await Auth().signUp(
                                 context,
                                 _nameController.text,
                                 _emailController.text,
                                 _passwordController.text,
                                 _subjectController.text,
                               );
+                              setState(() {
+                                _isLoading = false;
+                              });
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -203,25 +217,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               borderRadius: BorderRadius.circular(28),
                             ),
                           ),
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Create Account',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
+                          child: _isLoading
+                              ? const SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.5,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'SingUP',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Icon(Icons.arrow_forward_rounded, size: 20),
+                                  ],
                                 ),
-                              ),
-                              SizedBox(width: 8),
-                              Icon(Icons.arrow_forward_rounded, size: 20),
-                            ],
-                          ),
                         ),
                       ),
                       SizedBox(height: 20),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           const Text(
                             'Already have an account? ',
@@ -231,25 +254,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: widget.onNavigateToSignIn,
+                            onTap: () {
+                              Navigator.pushNamed(context, AppRouters.signIn);
+                            },
                             child: const Text(
-                              'Sign in',
+                              'signIn',
                               style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
                                 color: Color(0xFF1B5E8C),
                               ),
                             ),
                           ),
                         ],
                       ),
+                      const SizedBox(height: 28),
+                      SocialLoginRow(),
                     ],
                   ),
                 ),
-                const SizedBox(height: 28),
-
-                // Footer
-                const SizedBox(height: 32),
               ],
             ),
           ),
@@ -257,39 +280,4 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
-}
-
-const _labelStyle = TextStyle(
-  fontSize: 11,
-  fontWeight: FontWeight.w700,
-  color: Color(0xFF6B7A8D),
-  letterSpacing: 1.2,
-);
-
-InputDecoration _inputDecoration({
-  required String hint,
-  required IconData icon,
-  Widget? suffix,
-}) {
-  return InputDecoration(
-    hintText: hint,
-    hintStyle: const TextStyle(color: Color(0xFFABB5C2), fontSize: 15),
-    prefixIcon: Icon(icon, color: const Color(0xFF8A97A5), size: 20),
-    suffixIcon: suffix,
-    filled: true,
-    fillColor: const Color(0xFFECF0F5),
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(14),
-      borderSide: BorderSide.none,
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(14),
-      borderSide: BorderSide.none,
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(14),
-      borderSide: const BorderSide(color: Color(0xFF1B5E8C), width: 1.5),
-    ),
-    contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-  );
 }

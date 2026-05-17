@@ -1,17 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:scholar_flow/Models/marks_model.dart';
+import 'package:scholar_flow/Services/performance_services.dart';
 
 class MarksService {
   final _db = FirebaseFirestore.instance;
 
-  // ── Marks save karna ──
+  // Singleton se same instance milega — cache wahi invalidate hoga
+  final _perfService = PerformanceService();
+
   Future<void> saveMarks({
     required String studentId,
     required String subject,
     required double midterm,
     required double finalMarks,
   }) async {
-    // Total = 40% midterm + 60% final
     final total = (midterm * 0.4) + (finalMarks * 0.6);
     final grade = MarksModel.calculateGrade(total);
 
@@ -23,7 +25,6 @@ class MarksService {
       grade: grade,
     );
 
-    // Subject name ko ID banao (lowercase, spaces remove)
     final subjectId = subject.toLowerCase().replaceAll(' ', '_');
 
     await _db
@@ -33,11 +34,10 @@ class MarksService {
         .doc(subjectId)
         .set(model.toMap());
 
-    // ── Student ka overall GPA update karo ──
     await _updateStudentGPA(studentId);
+    _perfService.invalidateCache(); // ✅ Cache bust — next visit fresh data
   }
 
-  // ── GPA update karna ──
   Future<void> _updateStudentGPA(String studentId) async {
     final marksSnap = await _db
         .collection('Students')
@@ -60,7 +60,6 @@ class MarksService {
     });
   }
 
-  // ── Student ki marks stream ──
   Stream<QuerySnapshot> getMarksStream(String studentId) {
     return _db
         .collection('Students')
@@ -69,7 +68,6 @@ class MarksService {
         .snapshots();
   }
 
-  // ── Marks delete karna ──
   Future<void> deleteMarks(String studentId, String subject) async {
     final subjectId = subject.toLowerCase().replaceAll(' ', '_');
     await _db
@@ -80,5 +78,6 @@ class MarksService {
         .delete();
 
     await _updateStudentGPA(studentId);
+    _perfService.invalidateCache(); // ✅ Delete ke baad bhi cache bust
   }
 }
