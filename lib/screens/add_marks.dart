@@ -100,7 +100,7 @@ class _AddMarksPageState extends State<AddMarksPage> {
     if (mounted) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Marks save ho gayi ✅')));
+      ).showSnackBar(const SnackBar(content: Text('Marks saved!')));
       _midCtrl.clear();
       _finalCtrl.clear();
     }
