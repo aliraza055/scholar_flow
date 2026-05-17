@@ -77,6 +77,7 @@ class _DashboardViewState extends State<DashboardView> {
                 title: 'View Performance',
                 subtitle: 'Analytics for Mid-term results',
                 icon: Icons.trending_up_rounded,
+
                 backgroundColor: Color(0xFFEFF2FF),
               ),
             ),

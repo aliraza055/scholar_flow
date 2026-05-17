@@ -5,7 +5,6 @@ import 'package:scholar_flow/Services/performance_services.dart';
 class MarksService {
   final _db = FirebaseFirestore.instance;
 
-  // Singleton se same instance milega — cache wahi invalidate hoga
   final _perfService = PerformanceService();
 
   Future<void> saveMarks({
@@ -35,7 +34,7 @@ class MarksService {
         .set(model.toMap());
 
     await _updateStudentGPA(studentId);
-    _perfService.invalidateCache(); // ✅ Cache bust — next visit fresh data
+    _perfService.invalidateCache();
   }
 
   Future<void> _updateStudentGPA(String studentId) async {
@@ -78,6 +77,6 @@ class MarksService {
         .delete();
 
     await _updateStudentGPA(studentId);
-    _perfService.invalidateCache(); // ✅ Delete ke baad bhi cache bust
+    _perfService.invalidateCache();
   }
 }

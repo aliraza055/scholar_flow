@@ -41,109 +41,107 @@ class _PerformanceAnalyticsPageState extends State<PerformanceAnalyticsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FA),
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: _onRefresh,
-          color: const Color(0xFF1A73E8),
-          displacement: 20,
-          child: CustomScrollView(
-            physics: const AlwaysScrollableScrollPhysics(
-              parent: BouncingScrollPhysics(),
-            ),
-            slivers: [
-              SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    _buildHeader(),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // ── Attendance ──
-                          FutureBuilder<AttendanceStats>(
-                            future: _attendanceFuture,
-                            builder: (ctx, snap) {
-                              if (snap.connectionState ==
-                                  ConnectionState.waiting) {
-                                return _shimmerCard(height: 110);
-                              }
-                              return _AttendanceCard(
-                                stats:
-                                    snap.data ??
-                                    AttendanceStats(averagePercentage: 0),
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 16),
-
-                          // ── Batch Performance ──
-                          FutureBuilder<BatchStats>(
-                            future: _statsFuture,
-                            builder: (ctx, snap) {
-                              if (snap.connectionState ==
-                                  ConnectionState.waiting) {
-                                return _shimmerCard(height: 200, dark: true);
-                              }
-                              return _BatchPerformanceCard(
-                                stats:
-                                    snap.data ??
-                                    BatchStats(
-                                      totalStudents: 0,
-                                      averageGPA: 0,
-                                      topScore: 0,
-                                      passRate: 0,
-                                    ),
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 28),
-
-                          // ── Subject Proficiency ──
-                          const _SectionHeader(title: 'Subject Proficiency'),
-                          const SizedBox(height: 14),
-                          FutureBuilder<List<SubjectProficiency>>(
-                            future: _proficiencyFuture,
-                            builder: (ctx, snap) {
-                              if (snap.connectionState ==
-                                  ConnectionState.waiting) {
-                                return _shimmerCard(height: 160);
-                              }
-                              if (!snap.hasData || snap.data!.isEmpty) {
-                                return const _EmptyDataCard(
-                                  message:
-                                      'No marks data yet. Add student marks to see proficiency.',
-                                );
-                              }
-                              return _SubjectProficiencyCard(
-                                subjects: snap.data!,
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 28),
-
-                          // ── At Risk ──
-                          FutureBuilder<List<AtRiskStudent>>(
-                            future: _atRiskFuture,
-                            builder: (ctx, snap) {
-                              if (snap.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const SizedBox.shrink();
-                              }
-                              if (!snap.hasData || snap.data!.isEmpty) {
-                                return const SizedBox.shrink();
-                              }
-                              return _AtRiskCard(students: snap.data!);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        color: const Color(0xFF1A73E8),
+        displacement: 20,
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(
+            parent: BouncingScrollPhysics(),
           ),
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  _buildHeader(),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // ── Attendance ──
+                        FutureBuilder<AttendanceStats>(
+                          future: _attendanceFuture,
+                          builder: (ctx, snap) {
+                            if (snap.connectionState ==
+                                ConnectionState.waiting) {
+                              return _shimmerCard(height: 110);
+                            }
+                            return _AttendanceCard(
+                              stats:
+                                  snap.data ??
+                                  AttendanceStats(averagePercentage: 0),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 16),
+
+                        // ── Batch Performance ──
+                        FutureBuilder<BatchStats>(
+                          future: _statsFuture,
+                          builder: (ctx, snap) {
+                            if (snap.connectionState ==
+                                ConnectionState.waiting) {
+                              return _shimmerCard(height: 200, dark: true);
+                            }
+                            return _BatchPerformanceCard(
+                              stats:
+                                  snap.data ??
+                                  BatchStats(
+                                    totalStudents: 0,
+                                    averageGPA: 0,
+                                    topScore: 0,
+                                    passRate: 0,
+                                  ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 28),
+
+                        // ── Subject Proficiency ──
+                        const _SectionHeader(title: 'Subject Proficiency'),
+                        const SizedBox(height: 14),
+                        FutureBuilder<List<SubjectProficiency>>(
+                          future: _proficiencyFuture,
+                          builder: (ctx, snap) {
+                            if (snap.connectionState ==
+                                ConnectionState.waiting) {
+                              return _shimmerCard(height: 160);
+                            }
+                            if (!snap.hasData || snap.data!.isEmpty) {
+                              return const _EmptyDataCard(
+                                message:
+                                    'No marks data yet. Add student marks to see proficiency.',
+                              );
+                            }
+                            return _SubjectProficiencyCard(
+                              subjects: snap.data!,
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 28),
+
+                        // ── At Risk ──
+                        FutureBuilder<List<AtRiskStudent>>(
+                          future: _atRiskFuture,
+                          builder: (ctx, snap) {
+                            if (snap.connectionState ==
+                                ConnectionState.waiting) {
+                              return const SizedBox.shrink();
+                            }
+                            if (!snap.hasData || snap.data!.isEmpty) {
+                              return const SizedBox.shrink();
+                            }
+                            return _AtRiskCard(students: snap.data!);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -153,10 +151,10 @@ class _PerformanceAnalyticsPageState extends State<PerformanceAnalyticsPage> {
   Widget _buildHeader() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
+      padding: const EdgeInsets.fromLTRB(20, 32, 20, 32),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFF1A73E8), Color(0xFF0D47A1)],
+          colors: [Color(0xFF0F2041), Color(0xFF1A3A6E)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -259,7 +257,7 @@ class _SectionHeader extends StatelessWidget {
           height: 18,
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [Color(0xFF1A73E8), Color(0xFF0D47A1)],
+              colors: [Color(0xFF0F2041), Color(0xFF1A3A6E)],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),

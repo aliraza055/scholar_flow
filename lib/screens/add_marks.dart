@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scholar_flow/Models/marks_model.dart';
 import 'package:scholar_flow/Services/marks_services.dart';
+import 'package:scholar_flow/widgets/flutter_toast.dart';
 
 class AddMarksPage extends StatefulWidget {
   final String studentId;
@@ -71,14 +72,16 @@ class _AddMarksPageState extends State<AddMarksPage> {
     final fin = double.tryParse(_finalCtrl.text);
 
     if (mid == null || fin == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Valid marks enter karo')));
+      ToastError().showToast(
+        message: 'Enter Valid Marks!',
+        bgColor: Colors.red,
+      );
       return;
     }
     if (mid > 100 || fin > 100) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Marks 100 se zyada nahi ho sakti')),
+      ToastError().showToast(
+        message: 'Marks cannot be add more than 100 !',
+        bgColor: Colors.red,
       );
       return;
     }
