@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PerformanceService {
-  // ── Singleton: poori app mein ek hi instance ──────────────────────────────
   static final PerformanceService _instance = PerformanceService._internal();
   factory PerformanceService() => _instance;
   PerformanceService._internal();
-  // ─────────────────────────────────────────────────────────────────────────
 
   final _db = FirebaseFirestore.instance;
 
@@ -32,8 +30,6 @@ class PerformanceService {
 
   Future<AttendanceStats> getAttendanceStats() =>
       _cachedAttendance ??= _fetchAttendanceStats();
-
-  // ── Fetchers ───────────────────────────────────────────────────────────────
 
   Future<BatchStats> _fetchBatchStats() async {
     final studentsSnap = await _db.collection('Students').get();

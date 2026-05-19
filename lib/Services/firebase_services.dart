@@ -48,10 +48,7 @@ class FirebaseServices {
           }).toList();
         });
   }
-  // ── Paste these two methods inside your FirebaseServices class ────────────────
 
-  /// Ek din ki attendance submit karna
-  /// [attendanceMap] = { studentId: AttendanceStatus }
   Future<void> submitAttendance({
     required Map<String, AttendanceStatus> attendanceMap,
   }) async {
@@ -72,7 +69,6 @@ class FirebaseServices {
     });
   }
 
-  /// Kisi student ki attendance history lana
   Stream<List<AttendanceModel>> streamStudentAttendance(String studentId) {
     return FirebaseFirestore.instance
         .collection('Attendance')
@@ -85,7 +81,6 @@ class FirebaseServices {
         );
   }
 
-  /// Check — aaj ki attendance already submit ho chuki hai?
   Future<bool> isAttendanceSubmittedToday() async {
     final teacherId = FirebaseAuth.instance.currentUser!.uid;
     final today = DateTime.now();

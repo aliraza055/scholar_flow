@@ -120,11 +120,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
           return Column(
             children: [
-              // ── Header ────────────────────────────────────────────────
               _buildHeader(today, students.length),
               const SizedBox(height: 16),
 
-              // ── Already submitted banner ──────────────────────────────
               if (_alreadySubmitted)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 12),
@@ -161,7 +159,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   ),
                 ),
 
-              // ── Student List ──────────────────────────────────────────
               Expanded(
                 child:
                     snapshot.connectionState == ConnectionState.waiting &&
@@ -175,8 +172,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                     : students.isEmpty
                     ? _buildEmptyState()
                     : ListView.builder(
-                        // ✅ FIX: bottom padding keeps last card above
-                        // the submit button which itself sits above nav bar
                         padding: EdgeInsets.fromLTRB(
                           20,
                           4,
@@ -356,9 +351,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     );
   }
 
-  // ── Submit Button ─────────────────────────────────────────────────────────
-  // ✅ FIX: bottom padding = navBarOffset so button sits just above the nav bar
-
   Widget _buildSubmitButton(List<StudentModel> students, double navBarOffset) {
     return ValueListenableBuilder<int>(
       valueListenable: _presentCount,
@@ -409,8 +401,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       },
     );
   }
-
-  // ── Empty State ───────────────────────────────────────────────────────────
 
   Widget _buildEmptyState() {
     return Center(
