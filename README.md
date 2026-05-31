@@ -23,20 +23,15 @@ A modern Flutter-based mobile application designed to help students manage acade
 
 ---
 
-## 📸 App Screenshots
-
-### 🔐 Authentication
-<img src="assets/images/login_page.jpeg" width="250"/>
-<img src="assets/images/signup_dart.jpeg" width="250"/>
-
-### 🏠 Home Screen
-<img src="assets/images/home_page1.jpeg" width="250"/>
-
-### 📄 Other Screens
-<img src="assets/images/new_entry.jpeg" width="250"/>
-<img src="assets/images/attendance_page.jpeg" width="250"/>
-
----
+📸 App Screenshots
+🔐 SigIn & 🏠 SignUP
+<table cellpadding="12"> <tr> <td align="center"><b>🔐 Signup Page</b></td> <td align="center"><b>🏠 Home Page</b></td> </tr> <tr> <td align="center"> <img src="assets/login_page.jpeg" width="220"/> </td> <td align="center"> <img src="assets/signup_page.jpeg" width="220"/> </td> </tr> </table> <br/>
+✂️ Homepage 
+<table cellpadding="12"> <tr> <td align="center"><b>✂️ Booking Page</b></td> <td align="center"><b>📦 User Orders</b></td> </tr> <tr> <td align="center"> <img src="assets/home_page1.jpeg" width="220"/> </td> <td align="center"> <img src="assets/enter_marks.jpeg" width="220"/> </td> </tr> </table> <br/>
+👤 Add New Student & 📝 Attendance Page
+<table cellpadding="12"> <tr> <td align="center"><b>👤 Profile Page</b></td> <td align="center"><b>📝 Update Profile</b></td> </tr> <tr> <td align="center"> <img src="assets/new_entry.jpeg" width="220"/> </td> <td align="center"> <img src="assets/attendance_page.jpeg" width="220"/> </td> </tr> </table> <br/>
+🧑‍💼 Performance pages 
+<table cellpadding="12"> <tr> <td align="center"><b>🧑‍💼 Admin Login</b></td> <td align="center"><b>📋 Admin Orders</b></td> </tr> <tr> <td align="center"> <img src="assets/performance_page.jpeg" width="220"/> </td> <td align="center"> <img src="performance_page2.jpeg" width="220"/> </td> </tr> </table>
 
 ## 📂 Project Structure
 ```text
