@@ -1,16 +1,48 @@
-# scholar_flow
+# 📱 Scholar Flow – Flutter Mobile Application
 
-A new Flutter project.
+A modern Flutter-based mobile application designed to help students manage academic workflows efficiently.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🚀 Features
+- Clean & modern UI
+- Firebase Authentication
+- REST API Integration
+- Cloudinary for image storage
+- Real-time data handling
+- Responsive design
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🛠️ Tech Stack
+- **Flutter (Dart)**
+- **Firebase (Auth, Firestore)**
+- **REST APIs**
+- **Cloudinary**
+- **Provider (State Management)**
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## 📸 App Screenshots
+
+### 🔐 Authentication
+<img src="assets/images/login_page.jpeg" width="250"/>
+<img src="assets/images/signup_dart.jpeg" width="250"/>
+
+### 🏠 Home Screen
+<img src="assets/images/home_page1.jpeg" width="250"/>
+
+### 📄 Other Screens
+<img src="assets/images/new_entry.jpeg" width="250"/>
+<img src="assets/images/attendance_page.jpeg" width="250"/>
+
+---
+
+## 📂 Project Structure
+```text
+lib/
+ ├── screens/
+ ├── widgets/
+ ├── services/
+ ├── models/
+ └── main.dart
