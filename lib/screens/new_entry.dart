@@ -136,8 +136,8 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          width: 35,
-                          height: 35,
+                          width: 36,
+                          height: 36,
                           decoration: BoxDecoration(
                             color: const Color(0xFF1A3A6E).withOpacity(0.10),
                             borderRadius: BorderRadius.circular(10),
