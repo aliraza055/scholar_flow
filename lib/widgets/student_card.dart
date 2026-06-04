@@ -36,7 +36,7 @@ class StudentCard extends StatelessWidget {
           splashColor: const Color(0xFF1A73E8).withOpacity(0.05),
           highlightColor: const Color(0xFF1A73E8).withOpacity(0.03),
           child: Container(
-            padding: const EdgeInsets.all(14),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
